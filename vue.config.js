@@ -37,6 +37,13 @@ module.exports = {
       errors: true
     },
     // before: require('./mock/mock-server.js')
+    proxy: {
+      '/api': {
+        target: 'http://ihrm-java.itheima.net/',//这里不用加上api，自动带上了
+        changeOrigin: true,
+      },//这个只解决开发环境的跨域问题，生产环境要在服务器上配置，由运维工程师解决
+
+    }
   },
   configureWebpack: {
     // provide the app's title in webpack's name field, so that
