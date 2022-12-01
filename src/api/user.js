@@ -14,9 +14,13 @@ export function getInfo() {
     url: '/sys/profile',
   })
 }
-
+export function getUserDetailById(id) {
+  return request({
+    url:`/sys/user/${id}`
+  })
+}
 export function logout() {
   return request({
-
+    
   })
 }

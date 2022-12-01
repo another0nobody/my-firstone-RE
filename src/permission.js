@@ -5,7 +5,7 @@ import 'nprogress/nprogress.css' // 引入进度条样式
 
 const whiteList = ['/login', '/404'] // 定义白名单  所有不受权限控制的页面
 // 路由的前置守卫
-router.beforeEach(function(to, from, next) {
+router.beforeEach(async function(to, from, next) {
   NProgress.start() // 开启进度条
   //  首先判断有无token
   console.log(store);
@@ -15,6 +15,10 @@ router.beforeEach(function(to, from, next) {
       //  表示去的是登录页
       next('/') // 跳到主页
     } else {
+      // 将用户信息准备好,
+      if(!store.getters.userId) {
+        await store.dispatch('user/getUserInfo')
+      }
       next() // 直接放行
     }
   } else {
