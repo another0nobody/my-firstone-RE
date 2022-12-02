@@ -1,6 +1,11 @@
 import axios from 'axios'
-import {Message } from 'element-ui'
+import { Message } from 'element-ui'
+import router from '@/router'
 import store from '@/store'
+import { getTime } from '@/utils/auth'
+import { error } from 'jquery'
+const TIMEMAP = 3600
+
 // create an axios instance
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
@@ -12,6 +17,11 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   // 注入token
   if (store.getters.token) {
+     if (checkIsTimeOut()) {
+      store.dispatch('user/logout')
+      router.push('/login')
+      return Promise.reject(new Error('超时,登录信息已失效'))
+    }
     config.headers['Authorization'] = `Bearer ${store.getters.token}`
   }
   return config
@@ -32,8 +42,17 @@ service.interceptors.response.use(response => {
     return Promise.reject(new Error(message))
   }
 }, error => {
+    if (error?.response?.data?.code === 10002) {
+      store.dispatch('user/logout')
+      router.push('/login')
+    }
   Message.error(error.message) // 提示错误信息
   return Promise.reject(error) // 返回执行错误 让当前的执行链跳出成功 直接进入 catch
 })
 
+function checkIsTimeOut() {
+  var currentTime = Date.now() 
+  var timeStamp = getTime() 
+  return (currentTime - timeStamp) / 1000 > TIMEMAP
+}
 export default service

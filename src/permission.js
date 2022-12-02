@@ -36,3 +36,5 @@ router.beforeEach(async function(to, from, next) {
 router.afterEach(function() {
   NProgress.done() // 关闭进度条
 })
+
+
