@@ -3,42 +3,60 @@
     <div class="app-container">
       <!-- 实现页面的基本布局 -->
       <el-card class="tree-card">
-        <TreeTool :tree-node="company" :is-root="true" />
+        <TreeTool
+          :tree-node="company"
+          :is-root="true"
+          @makeDialogVisible="addDept"
+        />
         <el-tree :data="departs" :props="defaultProps" default-expand-all>
-          <TreeTool slot-scope="{ data }" :tree-node="data" :is-root="false" />
+          <TreeTool
+            slot-scope="{ data }"
+            :tree-node="data"
+            :is-root="false"
+            @delDep="getDepartmentInfo"
+            @makeDialogVisible="addDept"
+          />
         </el-tree>
       </el-card>
     </div>
+    <AddDept :dialogVisible="dialogVisible" />
   </div>
 </template>
 
 <script>
 import TreeTool from './components/tree-tools.vue'
+import { getDepartmentInfo } from '@/api/departments'
+import { transListToTree } from '@/utils/index'
+import AddDept from './components/add-dept.vue'
 export default {
   components: {
-    TreeTool
+    TreeTool,
+    AddDept
   },
   data() {
     return {
-      company: { name: '某某有限公司', manager: '负责人' },
+      company: {},
       defaultProps: {
-        label: 'name',
-        children: 'children'
+        label: 'name'
       },
-      departs: [
-        {
-          name: '总裁办',
-          manager: '曹操',
-          children: [{ name: '董事会', manager: '曹丕' }]
-        },
-        { name: '行政部', manager: '刘备' },
-        { name: '人事部', manager: '孙权' }
-      ]
+      departs: [],
+      dialogVisible: false,
+      node: {}
     }
   },
+  created() {
+    this.getDepartmentInfo()
+  },
   methods: {
-    handleNodeClick(data) {
-      console.log(data)
+    async getDepartmentInfo() {
+      const result = await getDepartmentInfo()
+      this.company = { name: result.companyName, manager: '负责人' }
+      this.departs = transListToTree(result.depts, '')
+      console.log(result)
+    },
+    addDept(node) {
+      this.dialogVisible = true //显示弹层
+      this.node = node
     }
   }
 }
