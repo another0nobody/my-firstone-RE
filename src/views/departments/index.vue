@@ -19,7 +19,7 @@
         </el-tree>
       </el-card>
     </div>
-    <AddDept :dialogVisible="dialogVisible" />
+    <AddDept :dialog-visible="dialogVisible" :tree-node="node" />
   </div>
 </template>
 
@@ -41,7 +41,7 @@ export default {
       },
       departs: [],
       dialogVisible: false,
-      node: {}
+      node: null
     }
   },
   created() {
@@ -50,9 +50,10 @@ export default {
   methods: {
     async getDepartmentInfo() {
       const result = await getDepartmentInfo()
-      this.company = { name: result.companyName, manager: '负责人' }
+      this.company = { name: result.companyName, manager: '负责人', id: '' }
+      // 如果不手动写入,根节点的id是undefined，使用格式校验时会对比同一个pid下的同级部门
       this.departs = transListToTree(result.depts, '')
-      console.log(result)
+      // console.log(result)
     },
     addDept(node) {
       this.dialogVisible = true //显示弹层
