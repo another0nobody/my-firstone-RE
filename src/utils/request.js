@@ -3,7 +3,6 @@ import { Message } from 'element-ui'
 import router from '@/router'
 import store from '@/store'
 import { getTime } from '@/utils/auth'
-import { error } from 'jquery'
 const TIMEMAP = 3600
 
 // create an axios instance

@@ -52,9 +52,10 @@ export default {
     async operateDeps(type) {
       if (type === 'add') {
         // 添加子部门
-        this.$emit('makeDialogVisible', this.treeNode)
-      } else if (type === 'deit') {
+        this.$emit('addDepts', this.treeNode)
+      } else if (type === 'edit') {
         // 编辑部门
+        this.$emit('editDepts', this.treeNode)
       } else {
         // 删除部门
         this.$confirm('您确定要删除该部门吗？', '正在进行删除操作', {

@@ -3,23 +3,26 @@
     <div class="app-container">
       <!-- 实现页面的基本布局 -->
       <el-card class="tree-card">
-        <TreeTool
-          :tree-node="company"
-          :is-root="true"
-          @makeDialogVisible="addDept"
-        />
+        <TreeTool :tree-node="company" :is-root="true" @addDepts="addDept" />
         <el-tree :data="departs" :props="defaultProps" default-expand-all>
           <TreeTool
             slot-scope="{ data }"
             :tree-node="data"
             :is-root="false"
             @delDep="getDepartmentInfo"
-            @makeDialogVisible="addDept"
+            @addDepts="addDept"
+            @editDepts="editDept"
           />
         </el-tree>
       </el-card>
     </div>
-    <AddDept :dialog-visible="dialogVisible" :tree-node="node" />
+    <AddDept
+      :dialog-visible="dialogVisible"
+      :tree-node="node"
+      @addDept="getDepartmentInfo"
+      @changeDialog="changeDialog"
+      ref="AddDept"
+    />
   </div>
 </template>
 
@@ -58,6 +61,14 @@ export default {
     addDept(node) {
       this.dialogVisible = true //显示弹层
       this.node = node
+    },
+    editDept(node) {
+      this.dialogVisible = true //显示弹层
+      this.node = node
+      this.$refs.AddDept.getDepartDetail(node.id)
+    },
+    async changeDialog(Boolean) {
+      this.dialogVisible = Boolean
     }
   }
 }
