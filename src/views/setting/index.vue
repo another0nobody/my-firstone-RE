@@ -106,7 +106,7 @@
         </el-tabs>
       </el-card>
     </div>
-    <el-dialog :title="dialogTitle" :visible="showDialog">
+    <el-dialog :title="dialogTitle" :visible="showDialog" @close="btnCancle">
       <el-form
         label-width="100px"
         :model="roleForm"
@@ -140,7 +140,6 @@ import {
   getRoleDetail,
   addRole
 } from '@/api/setting.js'
-import { Dialog } from 'element-ui'
 import { mapGetters } from 'vuex'
 export default {
   data() {
