@@ -28,13 +28,13 @@ export function updateRole(data) {
     method: 'put'
   })
 }
-// 修改员工
+// 修改角色
 export function getRoleDetail(id) {
   return request({
     url: `/sys/role/${id}`
   })
 }
-// 获得员工详情
+// 获得角色详情
 export function addRole(data) {
   return request({
     url: '/sys/role',
@@ -42,4 +42,4 @@ export function addRole(data) {
     method: 'post'
   })
 }
-// 新增员工
+// 新增角色
