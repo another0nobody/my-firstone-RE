@@ -1,7 +1,12 @@
 <template>
-  <el-dialog title="新增员工" :visible="showDialog">
+  <el-dialog title="新增员工" :visible="showDialog" @close="btnCancle">
     <!-- 表单 -->
-    <el-form label-width="120px" :model="formData" :rules="rules">
+    <el-form
+      label-width="120px"
+      :model="formData"
+      :rules="rules"
+      ref="employeeForm"
+    >
       <el-form-item label="姓名" prop="username">
         <el-input
           style="width: 50%"
@@ -28,7 +33,14 @@
           style="width: 50%"
           placeholder="请选择"
           v-model="formData.formOfEmployment"
-        />
+        >
+          <el-option
+            v-for="item in EmployeeEnum.hireType"
+            :key="item.id"
+            :value="item.id"
+            :label="item.value"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="工号" prop="workNumber">
         <el-input
@@ -66,8 +78,8 @@
     <template slot="footer">
       <el-row type="flex" justify="center">
         <el-col :span="6">
-          <el-button size="small">取消</el-button>
-          <el-button type="primary" size="small">确定</el-button>
+          <el-button size="small" @click="btnCancle">取消</el-button>
+          <el-button type="primary" size="small" @click="btnOk">确定</el-button>
         </el-col>
       </el-row>
     </template>
@@ -78,6 +90,7 @@
 import EmployeeEnum from '@/api/constant/employees'
 import { getDepartmentInfo } from '@/api/departments'
 import { transListToTree } from '@/utils/index.js'
+import { addEmployee } from '@/api/employees'
 export default {
   props: {
     showDialog: {
@@ -141,6 +154,30 @@ export default {
     selectNode(node) {
       this.formData.departmentName = node.name
       this.showTree = false
+    },
+    async btnOk() {
+      try {
+        await this.$refs.employeeForm.validate()
+        await addEmployee(this.formData)
+        this.$parent.getEmployeeList()
+        this.$emit('update:showDialog', false)
+        this.$message.success('添加成功')
+      } catch (error) {
+        this.$message.error(error)
+      }
+    },
+    btnCancle() {
+      this.$refs.employeeForm.resetFields()
+      this.formData = {
+        username: '',
+        mobile: '',
+        formOfEmployment: '',
+        workNumber: '',
+        departmentName: '',
+        timeOfEntry: '',
+        correctionTime: ''
+      }
+      this.$emit('update:showDialog', false)
     }
   }
 }

@@ -3,7 +3,7 @@
     <div class="app-container">
       <el-card shadow="always">
         <el-tabs>
-          <el-tab-pane label="员工管理">
+          <el-tab-pane label="角色管理">
             <el-row style="height: 60px">
               <el-button
                 type="primary"
@@ -11,7 +11,7 @@
                 icon="el-icon-plus"
                 @click="addRole"
               >
-                新增员工</el-button
+                新增角色</el-button
               >
             </el-row>
             <!-- 表格 -->
@@ -23,7 +23,7 @@
                 align="center"
               />
               <el-table-column
-                label="员工名称"
+                label="角色名称"
                 width="240"
                 prop="name"
                 align="center"
@@ -113,10 +113,10 @@
         :rules="roleRules"
         ref="roleForm"
       >
-        <el-form-item label="员工名称" prop="name">
+        <el-form-item label="角色名称" prop="name">
           <el-input v-model="roleForm.name"></el-input>
         </el-form-item>
-        <el-form-item label="员工描述">
+        <el-form-item label="角色描述">
           <el-input v-model="roleForm.description"></el-input>
         </el-form-item>
       </el-form>
@@ -163,9 +163,9 @@ export default {
         description: ''
       },
       roleRules: {
-        name: [{ required: true, message: '员工名不能为空', trigger: 'blur' }]
+        name: [{ required: true, message: '角色名不能为空', trigger: 'blur' }]
       },
-      dialogTitle: '编辑员工'
+      dialogTitle: '编辑角色'
     }
   },
   computed: {
@@ -190,7 +190,7 @@ export default {
     },
     async deleteRole(id) {
       try {
-        await this.$confirm('确认删除该员工吗?')
+        await this.$confirm('确认删除该角色吗?')
         deleteRole(id)
         this.getRoleList()
         this.$message.success('删除成功')
@@ -200,7 +200,7 @@ export default {
     },
     async editRole(id) {
       this.roleForm = await getRoleDetail(id)
-      this.dialogTitle = '编辑员工'
+      this.dialogTitle = '编辑角色'
       this.showDialog = true
     },
     async btnOk(id) {
@@ -228,7 +228,7 @@ export default {
       this.showDialog = false
     },
     addRole() {
-      this.dialogTitle = '新增员工'
+      this.dialogTitle = '新增角色'
       this.showDialog = true
     }
   }

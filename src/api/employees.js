@@ -28,3 +28,21 @@ export function addEmployee(data) {
     data
   })
 }
+// 新增员工
+export function importEmployee(data) {
+  return request({
+    url: '/sys/user/batch',
+    method: 'post',
+    data
+  })
+} 
+// 上传导入员工表格数组
+
+export function saveUserDetailById(data) {
+  return request({
+    url: `/sys/user/${data.id}`,
+    method: 'put',
+    data
+  })
+}
+// 上传用户数据
